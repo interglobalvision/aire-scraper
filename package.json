@@ -1,0 +1,44 @@
+{
+  "name": "aire-scraper",
+  "version": "0.1.0",
+  "description": "scraper for aire.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/interglobalvision/aire-scraper.git"
+  },
+  "keywords": [
+    "scraper",
+    "air",
+    "quality",
+    "mexico",
+    "city",
+    "cdmx"
+  ],
+  "author": "interglobal.vision",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/interglobalvision/aire-scraper/issues"
+  },
+  "homepage": "https://github.com/interglobalvision/aire-scraper",
+  "dependencies": {
+    "cheerio": "^0.20.0",
+    "lodash": "^4.11.2",
+    "moment": "^2.13.0",
+    "request": "^2.72.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-jscs": "^3.0.2",
+    "gulp-jshint": "^2.0.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-util": "^3.0.7",
+    "gulp-watch": "^4.3.5",
+    "jshint": "^2.9.2",
+    "jshint-stylish": "^2.2.0"
+  }
+}
