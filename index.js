@@ -5,6 +5,7 @@ var request = require('request');
 var cheerio = require('cheerio');
 var moment = require('moment');
 var _ = require('lodash');
+var Promise = require('promise');
 
 Scraper = {
   data: undefined,
@@ -25,24 +26,61 @@ Scraper = {
     'rh'
   ],
 
+  scrape: function() {
+    var _this = this;
+
+    _this.getTime();
+    _this.setupDataObject();
+
+    console.log('_this.data', _this.data);
+
+    _this.promises = _.clone(_this.pollutionTypes);
+
+    _.forEach(_this.pollutionTypes, function(item, index) {
+
+      _this.promises[index] = new Promise(function(resolve, reject) {
+
+        return request({
+          uri: _this.createDataUrl(item),
+        }, function(error, response, body) {
+
+          if (error) {
+            console.error('Request error:', error);
+            // need error handling here
+            reject(error);
+          } else {
+            _this.scrapeData(body, item);
+            resolve(body);
+          }
+
+        });
+
+      });
+
+    });
+
+    Promise.all(_this.promises).then(function(res) {
+
+      console.log('_this.data', _this.data);
+
+    });
+
+  },
+
   getTime: function() {
     var _this = this;
 
     _this.now = moment();
   },
 
-  getLocations: function() {
-    var _this = this;
-  },
-
   setupDataObject: function() {
     var _this = this;
 
-    _this.data = [
-      date = now.format('Y') + ' ' + now.format('MM'),
-      // create objects for each location here
-      locations = [],
-    ];
+    _this.data = undefined;
+    _this.data = {
+      date: _this.now.format('Y') + ' ' + _this.now.format('MM'),
+      pollutionTypes: [],
+    };
 
   },
 
@@ -77,11 +115,15 @@ Scraper = {
     var _this = this;
     var $ = cheerio.load(body);
 
+    var typeData = [];
     var locations = [];
 
     $('#glideDiv tr').last().children('td').slice(2).each(function(index, item) {
 
-      locations.push($(this).text());
+      var locationName = $(this).text();
+      locationName.replace(' ', '');
+
+      locations.push(locationName);
 
     });
 
@@ -89,27 +131,32 @@ Scraper = {
 
     var hour = $('.td_tabla_difusion tr').last().children('td').first().next().text();
 
-    console.log('Hour:', hour);
+    if (_this.data.hour === undefined) {
+      _this.data.hour = hour;
+    } else if (_this.data.hour !== hour) {
+      console.error('data hour mismatch');
+      // need handling here to fail
+      return;
+    }
 
     $('.td_tabla_difusion tr').last().children('td').slice(2).each(function(index, item) {
 
-      console.log(locations[index] + ' -> ' + $(this).text());
+      var location = locations[index];
+      var obj = {};
+
+      obj[location] = $(this).text();
+
+      typeData.push(obj);
 
     });
 
-  },
+    _this.data.pollutionTypes[type] = typeData;
 
-  dev: function() {
-    var _this = this;
-
-    _this.getTime();
-
-    _this.requestData(_this.pollutionTypes[6]);
   },
 
 }
 
-Scraper.dev();
+Scraper.scrape();
 
 // create request url[s]
 // make requests
