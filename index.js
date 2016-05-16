@@ -115,13 +115,12 @@ Scraper = {
     var _this = this;
     var $ = cheerio.load(body);
 
-    var typeData = [];
+    var typeData = {};
     var locations = [];
 
     $('#glideDiv tr').last().children('td').slice(2).each(function(index, item) {
 
-      var locationName = $(this).text();
-      locationName.replace(' ', '');
+      var locationName = $(this).text().replace(/\s/g, '');
 
       locations.push(locationName);
 
@@ -142,15 +141,17 @@ Scraper = {
     $('.td_tabla_difusion tr').last().children('td').slice(2).each(function(index, item) {
 
       var location = locations[index];
-      var obj = {};
 
-      obj[location] = $(this).text();
+      var value = $(this).text();
 
-      typeData.push(obj);
+      typeData[location] = value;
 
     });
 
-    _this.data.pollutionTypes[type] = typeData;
+    _this.data.pollutionTypes.push({
+      type: type,
+      data: typeData,
+    });
 
   },
 
