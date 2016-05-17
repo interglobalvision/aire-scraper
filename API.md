@@ -8,7 +8,7 @@ Retrives the latest data for all station and all types of pollution.
 
 #### Optional parameters
 
-`hours`(int): Number of hours you want to query (*default*: 24).
+`hours`(int): Number of hours you want to query (*default*: 1).
 
 #### Response
 
@@ -104,7 +104,7 @@ Retrives the latest data for a given pollution type in all available stations.
 
 #### Optional parameters
 
-`hours`(int): Number of hours you want to query (*default*: 24).
+`hours`(int): Number of hours you want to query (*default*: 1).
 
 #### Response
 
@@ -168,7 +168,7 @@ Retrive latest data from a specific station
 
 #### Optional parameters
 
-`hours`(int): Number of hours you want to query (*default*: 24).
+`hours`(int): Number of hours you want to query (*default*: 1).
 
 #### Response
 
@@ -230,7 +230,7 @@ Retrives latest data from the closest station to a given geolocation.
 
 #### Optional parameters
 
-`hours`(int): Number of hours you want to query (*default*: 24).
+`hours`(int): Number of hours you want to query (*default*: 1).
 
 #### Response
 
